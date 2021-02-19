@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
-using UnityEngine;
-using UnityEditor;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Unity.Mathematics;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Profiling;
 
 public class BuildWindow : EditorWindow
@@ -43,7 +43,6 @@ public class BuildWindow : EditorWindow
         public List<QuickstartEntry> entries = new List<QuickstartEntry>();
     }
 
-
     [Serializable]
     class QuickstartEntry
     {
@@ -79,7 +78,6 @@ public class BuildWindow : EditorWindow
             return arguments;
         }
     }
-
 
     enum BuildAction
     {
@@ -127,11 +125,9 @@ public class BuildWindow : EditorWindow
                 break;
             }
         }
-        if(loadLevelInfos)
+        if (loadLevelInfos)
             m_LevelInfos = BuildTools.LoadLevelInfos();
 
-        
-        
         m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos);
 
         GUILayout.Label("Project", EditorStyles.boldLabel);
@@ -174,12 +170,6 @@ public class BuildWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
 
-        
-        
-        
-        
-        
-        
         LevelInfo openLevel = null;
         foreach (var levelInfo in m_LevelInfos)
         {
@@ -220,7 +210,7 @@ public class BuildWindow : EditorWindow
 
     static string GetBuildExeName(BuildTarget buildTarget)
     {
-        if (buildTarget == BuildTarget.PS4)
+        if (buildTarget == BuildTarget.PS4 || buildTarget == BuildTarget.StandaloneOSX)
             return "AutoBuild";
         else
             return "AutoBuild.exe";
@@ -230,6 +220,8 @@ public class BuildWindow : EditorWindow
     {
         if (buildTarget == BuildTarget.PS4)
             return "AutoBuild/AutoBuild.bat";
+        else if (buildTarget == BuildTarget.StandaloneOSX)
+            return "AutoBuild.app/Contents/MacOS/AutoBuild";
         else
             return "AutoBuild.exe";
     }
@@ -254,7 +246,7 @@ public class BuildWindow : EditorWindow
 
         GUILayout.BeginHorizontal();
         s_SingleLevelBuilding = EditorGUILayout.Toggle("Single level building", s_SingleLevelBuilding);
-        
+
         // TODO (mogensh) We always force bundle build until we are sure non-forced works         
         // s_ForceBuildBundles = EditorGUILayout.Toggle("Force Build Bundles", s_ForceBuildBundles);
 
@@ -292,7 +284,7 @@ public class BuildWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        var buildTarget = EditorUserBuildSettings.activeBuildTarget;    // BuildTarget.StandaloneWindows64
+        var buildTarget = EditorUserBuildSettings.activeBuildTarget; // BuildTarget.StandaloneWindows64
         if (buildBundledLevels || buildBundledAssets)
         {
             BuildTools.BuildBundles(GetBundlePath(buildTarget), buildTarget, buildBundledAssets, buildBundledLevels, s_ForceBuildBundles, buildOnlyLevels);
@@ -466,7 +458,6 @@ public class BuildWindow : EditorWindow
 
         quickstartData.defaultArguments = EditorGUILayout.TextField("Default args", quickstartData.defaultArguments);
 
-
         quickstartData.entries[0].gameLoopMode = quickstartData.mode == QuickstartMode.Singleplayer ? GameLoopMode.Preview : GameLoopMode.Serve;
         quickstartData.entries[0].headless = quickstartData.headlessServer;
 
@@ -577,7 +568,7 @@ public class BuildWindow : EditorWindow
         Debug.Log("Starting " + buildPath + "/" + buildExe + " " + args);
         var process = new System.Diagnostics.Process();
         process.StartInfo.UseShellExecute = args.Contains("-batchmode");
-        process.StartInfo.FileName = Application.dataPath + "/../" + buildPath + "/" + buildExe;    // mogensh: for some reason we now need to specify project path
+        process.StartInfo.FileName = Application.dataPath + "/../" + buildPath + "/" + buildExe; // mogensh: for some reason we now need to specify project path
         process.StartInfo.Arguments = args;
         process.StartInfo.WorkingDirectory = buildPath;
         process.Start();
@@ -640,8 +631,6 @@ public class BuildWindow : EditorWindow
     {
         return Directory.GetLastWriteTime(GetAssetBundleFolder());
     }
-    
-    
 
     static DateTime TimeLastBuildGame()
     {
@@ -667,13 +656,12 @@ public class BuildWindowProgress : EditorWindow
     public static void Open(string heading)
     {
         BuildWindowProgress window = GetWindow<BuildWindowProgress>(false);
-        window.position = new Rect(200, 200, 800, 500);// new Rect(Screen.width / 2, Screen.height / 2, 800, 350);
+        window.position = new Rect(200, 200, 800, 500); // new Rect(Screen.width / 2, Screen.height / 2, 800, 350);
         window.ShowPopup();
         window.heading = heading;
         logs = new List<string>();
         Application.logMessageReceived += Msg;
     }
-
 
     private static void Msg(string condition, string stackTrace, LogType type)
     {
@@ -703,7 +691,7 @@ public class BuildWindowProgress : EditorWindow
             }
             style.richText = true;
         }
-        if(lastLogCount != logs.Count)
+        if (lastLogCount != logs.Count)
         {
             scroll = new Vector2(0, 100000);
             if (logs.Count > 1000)
@@ -717,8 +705,5 @@ public class BuildWindowProgress : EditorWindow
         GUILayout.Label(text, style);
         GUILayout.EndScrollView();
     }
-    
-
 
 }
-

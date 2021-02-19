@@ -1,11 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using UnityEngine;
-using UnityEditor;
 using System.Threading;
+using UnityEditor;
 using UnityEditor.Build.Pipeline;
+using UnityEngine;
 
 public class BuildTools
 {
@@ -13,12 +13,12 @@ public class BuildTools
     {
         //Create all of the directories
         foreach (string dirPath in Directory.GetDirectories(SourcePath, "*",
-            SearchOption.AllDirectories))
+                SearchOption.AllDirectories))
             Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
 
         //Copy all the files & Replaces any files with the same name
         foreach (string newPath in Directory.GetFiles(SourcePath, "*.*",
-            SearchOption.AllDirectories))
+                SearchOption.AllDirectories))
             File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath), true);
     }
 
@@ -69,14 +69,14 @@ public class BuildTools
         if (clearFolder)
         {
             Debug.Log(" deleting old folders ..");
-            foreach(var file in Directory.GetFiles(fullBuildPath))
+            foreach (var file in Directory.GetFiles(fullBuildPath))
                 File.Delete(file);
-            foreach(var dir in monoDirs)
-                Directory.Delete(dir,true);
-            foreach(var dir in il2cppDirs)
-                Directory.Delete(dir,true);
-            foreach(var dir in Directory.GetDirectories(fullBuildPath).Where(s => s.EndsWith("_Data")))
-                Directory.Delete(dir,true);
+            foreach (var dir in monoDirs)
+                Directory.Delete(dir, true);
+            foreach (var dir in il2cppDirs)
+                Directory.Delete(dir, true);
+            foreach (var dir in Directory.GetDirectories(fullBuildPath).Where(s => s.EndsWith("_Data")))
+                Directory.Delete(dir, true);
         }
 
         if (il2cpp)
@@ -88,7 +88,7 @@ public class BuildTools
         {
             UnityEditor.PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
         }
-        
+
         /// Colossal hack to work around build postprocessing expecting everything to be writable in the unity
         /// installation, but if people have unity in p4 it will be readonly.
         var editorHome = EditorApplication.applicationPath.BeforeLast("/") + "/Data/PlaybackEngines/windowsstandalonesupport";
@@ -96,10 +96,10 @@ public class BuildTools
         if (Directory.Exists(editorHome))
         {
             var files = Directory.GetFiles(editorHome, "*.*", SearchOption.AllDirectories);
-            foreach(var f in files)
+            foreach (var f in files)
             {
                 var attr = File.GetAttributes(f);
-                if((attr & FileAttributes.ReadOnly) != 0)
+                if ((attr & FileAttributes.ReadOnly) != 0)
                 {
                     attr = attr & ~FileAttributes.ReadOnly;
                     Debug.Log("Setting " + f + " to read/write");
@@ -108,7 +108,7 @@ public class BuildTools
             }
         }
         Debug.Log("Done.");
-        
+
         Environment.SetEnvironmentVariable("BUILD_ID", buildId, EnvironmentVariableTarget.Process);
         var result = BuildPipeline.BuildPlayer(levels, exePathName, target, opts);
         Environment.SetEnvironmentVariable("BUILD_ID", "", EnvironmentVariableTarget.Process);
@@ -118,16 +118,14 @@ public class BuildTools
             Directory.Delete(bundlePathDst, true);
         }
 
-
         Debug.Log(" ==== Build Done =====");
 
-
         var stepCount = result.steps.Count();
-        Debug.Log(" Steps:"+ stepCount);
-        for(var i=0;i<stepCount;i++)
+        Debug.Log(" Steps:" + stepCount);
+        for (var i = 0; i < stepCount; i++)
         {
             var step = result.steps[i];
-            Debug.Log("-- " + (i+1) + "/" + stepCount + " " + step.name + " " + step.duration.Seconds + "s --");
+            Debug.Log("-- " + (i + 1) + "/" + stepCount + " " + step.name + " " + step.duration.Seconds + "s --");
             foreach (var msg in step.messages)
                 Debug.Log(msg.content);
         }
@@ -323,7 +321,7 @@ public class BuildTools
 
         if (EditorUtility.DisplayDialog("Reserialize " + paths.Count + " assets", "Do you want to reserialize " + paths.Count + " assets?", "Yes, I do!"))
         {
-            foreach(var p in paths)
+            foreach (var p in paths)
             {
                 var a = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(p);
                 EditorUtility.SetDirty(a);
@@ -376,7 +374,7 @@ public class BuildTools
             " clientApi=" + clientApi + " projectId=" + projectId + " orgId=" + orgId +
             " projectName=" + projectName + " accessToken=" + accessToken);
 
-        deploy.CompressAndUpload(buildPath, buildPath+"/"+dstPath, platform, buildName);
+        deploy.CompressAndUpload(buildPath, buildPath + "/" + dstPath, platform, buildName);
         while (!deploy.Done)
         {
             deploy.UpdateLoop();
@@ -423,8 +421,8 @@ public class BuildTools
         // Build boot.cfg
         var bootCfg = new string[]
         {
-           "client",
-           "load level_menu"
+            "client",
+            "load level_menu"
         };
         File.WriteAllLines(buildPath + "/" + Game.k_BootConfigFilename, bootCfg);
         Debug.Log("  " + Game.k_BootConfigFilename);
@@ -432,41 +430,40 @@ public class BuildTools
         Debug.Log("Writing steam upload bat file.");
         var steamBat = new string[]
         {
-@"@echo off",
-@"color",
-@"echo Verifying Steam SDK...",
-@"if not exist c:\steam\sdk\tools\ContentBuilder (",
-@"    echo Failed. Steam SDK must be installed at c:\steam",
-@"    goto :err",
-@")",
-@"echo OK. Found SDK at c:\steam",
-@"echo Looking for zipped game...",
-@"if not exist " + zipName + " (",
-@"    echo Failed. Did not locate zip: " + zipName,
-@"    goto :err",
-@")",
-@"echo OK. Found game at "+zipName,
-@"echo Removing old stage area",
-@"rmdir /s /q c:\steam\stage",
-@"echo Extracting build to staging area",
-@"""c:\Program Files\7-Zip\7z.exe"" x "+zipName + @" -oc:\steam\stage",
-@" cd c:\steam\sdk\tools\ContentBuilder",
-@"set /p steamuser=""Enter steam user:""",
-@"builder\steamcmd.exe +login %steamuser% +run_app_build_http ..\scripts\app_build_962460.vdf +quit",
-@"echo All done!",
-@"goto :ok",
-@":err",
-@"color 4f",
-@"goto :done",
-@":ok",
-@"color 2f",
-@":done",
-@"pause"
+            @"@echo off",
+            @"color",
+            @"echo Verifying Steam SDK...",
+            @"if not exist c:\steam\sdk\tools\ContentBuilder (",
+            @"    echo Failed. Steam SDK must be installed at c:\steam",
+            @"    goto :err",
+            @")",
+            @"echo OK. Found SDK at c:\steam",
+            @"echo Looking for zipped game...",
+            @"if not exist " + zipName + " (",
+            @"    echo Failed. Did not locate zip: " + zipName,
+            @"    goto :err",
+            @")",
+            @"echo OK. Found game at " + zipName,
+            @"echo Removing old stage area",
+            @"rmdir /s /q c:\steam\stage",
+            @"echo Extracting build to staging area",
+            @"""c:\Program Files\7-Zip\7z.exe"" x " + zipName + @" -oc:\steam\stage",
+            @" cd c:\steam\sdk\tools\ContentBuilder",
+            @"set /p steamuser=""Enter steam user:""",
+            @"builder\steamcmd.exe +login %steamuser% +run_app_build_http ..\scripts\app_build_962460.vdf +quit",
+            @"echo All done!",
+            @"goto :ok",
+            @":err",
+            @"color 4f",
+            @"goto :done",
+            @":ok",
+            @"color 2f",
+            @":done",
+            @"pause"
         };
         var steamBatName = "steam_upload_" + buildName + ".bat";
         File.WriteAllLines(buildPath + "/../" + steamBatName, steamBat);
         Debug.Log("  " + steamBatName);
-
 
         Debug.Log("Window64 build postprocessing done.");
     }
@@ -532,7 +529,6 @@ public class BuildTools
         var buildPath = GetBuildPath(target, buildName);
         string executableName = "server-linux.x86_64";
 
-
         if (!Directory.Exists(buildPath) || !File.Exists(buildPath + "/" + executableName))
         {
             Debug.Log("No build here: " + buildPath);
@@ -548,8 +544,8 @@ public class BuildTools
         // Build boot.cfg
         var bootCfg = new string[]
         {
-           "game.modename assault",
-           "serve level_01"
+            "game.modename assault",
+            "serve level_01"
         };
         File.WriteAllLines(buildPath + "/" + Game.k_BootConfigFilename, bootCfg);
         Debug.Log("  " + Game.k_BootConfigFilename);
@@ -597,5 +593,42 @@ public class BuildTools
             throw new Exception("BuildPipeline.BuildPlayer failed: " + res.ToString());
 
         GameDebug.Log("Linux build completed...");
+    }
+
+    [MenuItem("FPS Sample/BuildSystem/Mac/CreateBuildMac64_OnlyExecutable")]
+    public static void CreateBuildMac64_OnlyExecutable()
+    {
+        /* var target = BuildTarget.StandaloneLinux64;
+        var buildName = GetBuildName();
+        var buildPath = GetBuildPath(target, buildName);
+        string executableName = "server-linux.x86_64";
+
+        Directory.CreateDirectory(buildPath);
+        var res = BuildGame(buildPath, executableName, target, BuildOptions.EnableHeadlessMode, buildName, false);
+
+        if (!res)
+            throw new Exception("BuildPipeline.BuildPlayer failed");
+        if (res.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+            throw new Exception("BuildPipeline.BuildPlayer failed: " + res.ToString());
+
+        GameDebug.Log("Mac build completed...");*/
+    }
+
+    [MenuItem("FPS Sample/BuildSystem/Mac/CreateBuildMac64")]
+    public static void CreateBuildMac64()
+    {
+        var target = BuildTarget.StandaloneOSX;
+        var buildName = GetBuildName();
+        var buildPath = GetBuildPath(target, buildName);
+        string executableName = Application.productName;
+
+        Directory.CreateDirectory(buildPath);
+        BuildBundles(buildPath, target, true, true, true);
+        var res = BuildGame(buildPath, executableName, target, BuildOptions.None, buildName, false);
+
+        if (!res)
+            throw new Exception("BuildPipeline.BuildPlayer failed");
+        if (res.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+            throw new Exception("BuildPipeline.BuildPlayer failed: " + res.ToString());
     }
 }

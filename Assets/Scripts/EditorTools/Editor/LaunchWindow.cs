@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor.Networking.PlayerConnection;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -28,7 +28,6 @@ public class LaunchWindow : EditorWindow
         public List<Entry> entries = new List<Entry>();
     }
 
-
     [MenuItem("FPS Sample/Windows/LaunchWindow")]
     public static void ShowWindow()
     {
@@ -48,11 +47,10 @@ public class LaunchWindow : EditorWindow
     {
         var defaultGUIColor = GUI.color;
         var defaultGUIBackgrounColor = GUI.backgroundColor;
-            
+
         EditorGUI.BeginChangeCheck();
 
         EditorGUILayout.BeginVertical();
-
 
         // Quick start buttons
         GUILayout.BeginHorizontal();
@@ -114,11 +112,9 @@ public class LaunchWindow : EditorWindow
                 entry.count = EditorGUILayout.IntField(entry.count, GUILayout.Width(30), GUILayout.ExpandWidth(false));
 
                 GUI.backgroundColor = entry.runInEditor ? Color.yellow : GUI.backgroundColor;
-                
-               
-               
+
                 GUI.backgroundColor = defaultGUIBackgrounColor;
-                
+
                 var runInEditor = GUILayout.Toggle(entry.runInEditor, "Editor", new GUIStyle("Button"), GUILayout.Width(50));
                 if (runInEditor != entry.runInEditor)
                 {
@@ -136,7 +132,6 @@ public class LaunchWindow : EditorWindow
             }
         }
 
-
         GUILayout.FlexibleSpace();
 
         EditorGUILayout.EndScrollView();
@@ -152,9 +147,9 @@ public class LaunchWindow : EditorWindow
 
     void StartEntry(Entry entry)
     {
-        
+
         // Convert line breaks to space and remove commented out lines
-        var lines = entry.arguments.Split(new String[] { "\r\n","\n"  }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var lines = entry.arguments.Split(new String[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
         lines.RemoveAll(str => str.Contains("//"));
         var args = "";
         lines.ForEach(str => args += str + " ");
@@ -165,7 +160,7 @@ public class LaunchWindow : EditorWindow
             EditorLevelManager.StartGameInEditor(args);
             standaloneCount--;
         }
-            
+
         for (var i = 0; i < standaloneCount; i++)
         {
             //if (allowDevBuild && entry.useDevBuild)
@@ -193,6 +188,8 @@ public class LaunchWindow : EditorWindow
     {
         if (buildTarget == BuildTarget.PS4)
             return "AutoBuild";
+        else if (buildTarget == BuildTarget.StandaloneOSX)
+            return "AutoBuild.app";
         else
             return "AutoBuild.exe";
     }
@@ -201,10 +198,12 @@ public class LaunchWindow : EditorWindow
     {
         if (buildTarget == BuildTarget.PS4)
             return "AutoBuild/AutoBuild.bat";
+        else if (buildTarget == BuildTarget.StandaloneOSX)
+            return "AutoBuild.app";
         else
             return "AutoBuild.exe";
     }
-    
+
     static void StopAll()
     {
         EditorApplication.isPlaying = false;
@@ -224,7 +223,6 @@ public class LaunchWindow : EditorWindow
             }
         }
     }
-
 
     const string editorPrefName = "LauchWindowData";
     Data data;
