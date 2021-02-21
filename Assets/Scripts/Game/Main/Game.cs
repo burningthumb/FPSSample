@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Entities;
-using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering.HDPipeline;
 using System;
 using System.Globalization;
@@ -326,8 +326,8 @@ public class Game : MonoBehaviour
             var hdpipe = RenderPipelineManager.currentPipeline as HDRenderPipeline;
             if (hdpipe != null)
             {
-                hdpipe.DebugLayer2DCallback = DebugOverlay.Render;
-                hdpipe.DebugLayer3DCallback = DebugOverlay.Render3D;
+                //hdpipe.DebugLayer2DCallback = DebugOverlay.Render;
+                //hdpipe.DebugLayer3DCallback = DebugOverlay.Render3D;
             }
 
             m_GameStatistics = new GameStatistics();
@@ -517,8 +517,8 @@ public class Game : MonoBehaviour
             var hdpipe = RenderPipelineManager.currentPipeline as HDRenderPipeline;
             if (hdpipe != null)
             {
-                hdpipe.DebugLayer2DCallback = DebugOverlay.Render;
-                hdpipe.DebugLayer3DCallback = DebugOverlay.Render3D;
+                //hdpipe.DebugLayer2DCallback = DebugOverlay.Render;
+                //hdpipe.DebugLayer3DCallback = DebugOverlay.Render3D;
 
                 var layer = LayerMask.NameToLayer("PostProcess Volumes");
                 if (layer == -1)

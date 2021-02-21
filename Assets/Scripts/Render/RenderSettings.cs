@@ -78,7 +78,7 @@ public static class RenderSettings
         }
         if(rOcclusionThreshold.ChangeCheck())
         {
-            HDRenderPipeline.s_OcclusionThreshold = rOcclusionThreshold.FloatValue;
+            //HDRenderPipeline.s_OcclusionThreshold = rOcclusionThreshold.FloatValue;
         }
 
         bool updateAAFlags = false;
@@ -144,8 +144,11 @@ public static class RenderSettings
             updateAAFlags = true;
 
         // Post effect flags
+        /*
         if (rBloom.ChangeCheck())
+        {
             Bloom.globalEnable = rBloom.IntValue > 0;
+        }
 
         if (rMotionBlur.ChangeCheck())
         {
@@ -167,6 +170,7 @@ public static class RenderSettings
             ScreenSpaceReflections.globalEnable = rSSR.IntValue > 0;
             updateFrameSettings = true;
         }
+        */
 
         if (rSSS.ChangeCheck())
             updateFrameSettings = true;
@@ -177,6 +181,7 @@ public static class RenderSettings
         if (rDistortion.ChangeCheck())
             updateFrameSettings = true;
 
+        /*
         if (rShadowDistMult.ChangeCheck())
             HDShadowSettings.shadowDistanceMultiplier = Mathf.Clamp(rShadowDistMult.FloatValue, 0.5f, 4.0f);
 
@@ -188,6 +193,7 @@ public static class RenderSettings
 
         if (rGamma.ChangeCheck())
             ColorGrading.globalGamma = Mathf.Clamp(rGamma.FloatValue, 0.1f, 5.0f);
+        */
 
         if (updateAAFlags)
             UpdateAAFlags(Game.game.TopCamera());
@@ -229,7 +235,7 @@ public static class RenderSettings
         var hdCam = c.GetComponent<HDAdditionalCameraData>();
         if (hdCam == null)
             return;
-
+        /*
         hdCam.GetFrameSettings().enableSubsurfaceScattering = rSSS.IntValue > 0;
         hdCam.GetFrameSettings().enableMotionVectors = rMotionBlur.IntValue > 0;
         hdCam.GetFrameSettings().enableObjectMotionVectors = rMotionBlur.IntValue > 0;
@@ -237,6 +243,7 @@ public static class RenderSettings
         hdCam.GetFrameSettings().enableSSR = rSSR.IntValue > 0;
         hdCam.GetFrameSettings().enableRoughRefraction = rRoughRefraction.IntValue > 0;
         hdCam.GetFrameSettings().enableDistortion = rDistortion.IntValue > 0;
+        */
     }
 
     static void UpdateAAFlags(Camera c)
