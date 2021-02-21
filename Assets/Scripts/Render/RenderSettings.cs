@@ -144,33 +144,35 @@ public static class RenderSettings
             updateAAFlags = true;
 
         // Post effect flags
-        /*
+        
         if (rBloom.ChangeCheck())
         {
-            Bloom.globalEnable = rBloom.IntValue > 0;
+            //Bloom.globalEnable = rBloom.IntValue > 0;
         }
 
         if (rMotionBlur.ChangeCheck())
         {
-            MotionBlur.globalEnable = rMotionBlur.IntValue > 0;
+            //MotionBlur.globalEnable = rMotionBlur.IntValue > 0;
             updateFrameSettings = true;
         }
 
         if (rSSAO.ChangeCheck())
         {
-            AmbientOcclusion.globalEnable = rSSAO.IntValue > 0;
+            //AmbientOcclusion.globalEnable = rSSAO.IntValue > 0;
             updateFrameSettings = true;
         }
 
         if (rGrain.ChangeCheck())
-            Grain.globalEnable = rGrain.IntValue > 0;
+        {
+            //Grain.globalEnable = rGrain.IntValue > 0;
+        }
 
         if (rSSR.ChangeCheck())
         {
-            ScreenSpaceReflections.globalEnable = rSSR.IntValue > 0;
+            //ScreenSpaceReflections.globalEnable = rSSR.IntValue > 0;
             updateFrameSettings = true;
         }
-        */
+        
 
         if (rSSS.ChangeCheck())
             updateFrameSettings = true;
