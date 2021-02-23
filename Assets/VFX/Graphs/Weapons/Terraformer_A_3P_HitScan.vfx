@@ -129,15 +129,16 @@ VisualEffectResource:
       Source:Slot Random:Off channels:XYZ */\n{\n    direction = Direction;\n}\nvoid
       SetAttribute_CAC29747(inout float3 position, float3 Position) /*attribute:position
       Composition:Overwrite Source:Slot Random:Off channels:XYZ */\n{\n    position
-      = Position;\n}\nvoid PositionSequential_18D(uint particleId, inout float3 position,
-      float3 computedPosition) /*shape:Line index:ParticleID writePosition:True writeTargetPosition:False
-      */\n{\n    position += computedPosition;\n    \n}\nvoid SetAttribute_F0142CB9(inout
-      float lifetime, float Lifetime) /*attribute:lifetime Composition:Overwrite Source:Slot
-      Random:Off channels:XYZ */\n{\n    lifetime = Lifetime;\n}\nvoid SetCustomAttribute_78508CAD(inout
-      float Progress, float _Progress) /*attribute:Progress Composition:Overwrite
-      Random:Off AttributeType:Float */\n{\n    Progress = _Progress;\n}\nvoid SetAttribute_E629755(inout
-      float3 velocity, float3 Velocity) /*attribute:velocity Composition:Overwrite
-      Source:Slot Random:Off channels:XYZ */\n{\n    velocity = Velocity;\n}\n\n\n\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\nvoid
+      = Position;\n}\nvoid PositionSequential_267A9(uint particleId, inout float3
+      position, float3 computedPosition) /*shape:Line index:ParticleID writePosition:True
+      writeTargetPosition:False mode:Wrap */\n{\n    position += computedPosition;\n
+      \   \n}\nvoid SetAttribute_F0142CB9(inout float lifetime, float Lifetime) /*attribute:lifetime
+      Composition:Overwrite Source:Slot Random:Off channels:XYZ */\n{\n    lifetime
+      = Lifetime;\n}\nvoid SetCustomAttribute_78508CAD(inout float Progress, float
+      _Progress) /*attribute:Progress Composition:Overwrite Random:Off AttributeType:Float
+      */\n{\n    Progress = _Progress;\n}\nvoid SetAttribute_E629755(inout float3
+      velocity, float3 Velocity) /*attribute:velocity Composition:Overwrite Source:Slot
+      Random:Off channels:XYZ */\n{\n    velocity = Velocity;\n}\n\n\n\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\nvoid
       CSMain(uint3 groupId          : SV_GroupID,\n            uint3 groupThreadId
       \   : SV_GroupThreadID)\n{\n    uint id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP;\n#if
       !VFX_USE_SPAWNER_FROM_GPU\n    id += groupId.y * dispatchWidth * NB_THREADS_PER_GROUP;\n#endif\n\n#if
@@ -158,7 +159,7 @@ VisualEffectResource:
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        float3 targetPosition = float3(0,0,0);\n        bool
       alive = (bool)true;\n        float3 direction = float3(0,0,1);\n        uint
-      particleId = (uint)0;\n        float lifetime = (float)0;\n        float Progress
+      particleId = (uint)0;\n        float lifetime = (float)1;\n        float Progress
       = (float)0;\n        float3 velocity = float3(0,0,0);\n        float age = (float)0;\n
       \       float3 position_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
       * 0x8 + 0x0) << 2));\n        float3 targetPosition_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
@@ -188,7 +189,7 @@ VisualEffectResource:
       tmp_x / (float)255;\n            float3 tmp_ba = float3(tmp_z, tmp_z, tmp_z);\n
       \           float3 tmp_bc = direction * float3(4,4,4);\n            float3 tmp_bd
       = tmp_s + tmp_bc;\n            float3 tmp_be = tmp_bd - tmp_s;\n            float3
-      tmp_bf = tmp_ba * tmp_be;\n            float3 tmp_bg = tmp_s + tmp_bf;\n            PositionSequential_18D(particleId,
+      tmp_bf = tmp_ba * tmp_be;\n            float3 tmp_bg = tmp_s + tmp_bf;\n            PositionSequential_267A9(particleId,
       \ /*inout */position, tmp_bg);\n        }\n        {\n            float3 tmp_s
       = targetPosition - position;\n            float3 tmp_t = tmp_s * tmp_s;\n            float
       tmp_u = tmp_t[2];\n            float tmp_v = tmp_t[1];\n            float tmp_w
@@ -197,15 +198,14 @@ VisualEffectResource:
       tmp_bc = tmp_ba / (float)64;\n            float tmp_be = min(tmp_bc, (float)0.3);\n
       \           SetAttribute_F0142CB9( /*inout */lifetime, tmp_be);\n        }\n
       \       {\n            float tmp_s = (float)particleId;\n            float tmp_u
-      = tmp_s / (float)256;\n            float tmp_v = floor(tmp_u);\n            float
-      tmp_w = tmp_u - tmp_v;\n            SetCustomAttribute_78508CAD( /*inout */Progress,
-      tmp_w);\n        }\n        {\n            float3 tmp_s = targetPosition - position;\n
-      \           float3 tmp_t = float3(lifetime, lifetime, lifetime);\n            float3
-      tmp_u = tmp_s / tmp_t;\n            SetAttribute_E629755( /*inout */velocity,
-      tmp_u);\n        }\n        \n\n\n#if VFX_USE_ALIVE_CURRENT\n        if (alive)\n
-      \       {\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\n            uint
-      index = deadListIn[deadIndex];\n            attributeBuffer.Store3((index *
-      0x8 + 0x0) << 2,asuint(position));\n            attributeBuffer.Store((index
+      = tmp_s / (float)256;\n            float tmp_v = frac(tmp_u);\n            SetCustomAttribute_78508CAD(
+      /*inout */Progress, tmp_v);\n        }\n        {\n            float3 tmp_s
+      = targetPosition - position;\n            float3 tmp_t = float3(lifetime, lifetime,
+      lifetime);\n            float3 tmp_u = tmp_s / tmp_t;\n            SetAttribute_E629755(
+      /*inout */velocity, tmp_u);\n        }\n        \n\n\n#if VFX_USE_ALIVE_CURRENT\n
+      \       if (alive)\n        {\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\n
+      \           uint index = deadListIn[deadIndex];\n            attributeBuffer.Store3((index
+      * 0x8 + 0x0) << 2,asuint(position));\n            attributeBuffer.Store((index
       * 0x8 + 0x3) << 2,uint(alive));\n            attributeBuffer.Store((index *
       0x1 + 0x80000) << 2,asuint(lifetime));\n            attributeBuffer.Store((index
       * 0x1 + 0x90000) << 2,asuint(Progress));\n            attributeBuffer.Store3((index
@@ -582,9 +582,8 @@ VisualEffectResource:
       VFX_VARYING_EMISSIVE\n\t\t\t\t\t\t\t\t\t#if HDRP_USE_EMISSIVE_COLOR\n\t\t\t\t\t\t\t\t\to.VFX_VARYING_EMISSIVE
       = color;\n\t\t\t\t\t\t\t\t\t#elif HDRP_USE_ADDITIONAL_EMISSIVE_COLOR\n\t\t\t\t\t\t\t\t\tfloat4
       emissiveColor = (float4)0;\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t    float
-      tmp_x = max(Progress, (float)0);\n\t\t\t\t\t\t\t\t\t    float tmp_z = min(tmp_x,
-      (float)1);\n\t\t\t\t\t\t\t\t\t    float4 tmp_ba = SampleGradient(uniform_e,tmp_z);\n\t\t\t\t\t\t\t\t\t
-      \   \n\t\t\t\t\t\t\t\t\t    emissiveColor = tmp_ba;\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\to.VFX_VARYING_EMISSIVE
+      tmp_w = saturate(Progress);\n\t\t\t\t\t\t\t\t\t    float4 tmp_x = SampleGradient(uniform_e,tmp_w);\n\t\t\t\t\t\t\t\t\t
+      \   \n\t\t\t\t\t\t\t\t\t    emissiveColor = tmp_x;\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\to.VFX_VARYING_EMISSIVE
       = emissiveColor;\n\t\t\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\t\t#if
       HDRP_USE_ADDITIONAL_BASE_COLOR\n\t\t\t\t\t\t\t\t\t#ifdef VFX_VARYING_COLOR\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\to.VFX_VARYING_COLOR
       = baseColor;\n\t\t\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\n\t\t\t\treturn
@@ -665,18 +664,18 @@ VisualEffectResource:
         data[1]: -1
         data[2]: -1
         data[3]: 13
-      - op: 1
-        valueIndex: 11
-        data[0]: -1
-        data[1]: -1
-        data[2]: -1
-        data[3]: 1
       - op: 50
-        valueIndex: 12
+        valueIndex: 11
         data[0]: 6
         data[1]: -1
         data[2]: -1
         data[3]: 0
+      - op: 1
+        valueIndex: 15
+        data[0]: -1
+        data[1]: -1
+        data[2]: -1
+        data[3]: 1
       - op: 1
         valueIndex: 16
         data[0]: -1
@@ -694,46 +693,46 @@ VisualEffectResource:
         data[0]: -1
         data[1]: -1
         data[2]: -1
-        data[3]: 1
+        data[3]: 14
       - op: 1
         valueIndex: 19
         data[0]: -1
         data[1]: -1
         data[2]: -1
-        data[3]: 14
-      - op: 1
-        valueIndex: 20
-        data[0]: -1
-        data[1]: -1
-        data[2]: -1
         data[3]: 1
       - op: 51
-        valueIndex: 21
-        data[0]: 12
+        valueIndex: 20
+        data[0]: 11
         data[1]: -1
         data[2]: -1
         data[3]: 0
+      - op: 1
+        valueIndex: 21
+        data[0]: -1
+        data[1]: -1
+        data[2]: -1
+        data[3]: 14
       - op: 1
         valueIndex: 22
         data[0]: -1
         data[1]: -1
         data[2]: -1
-        data[3]: 14
+        data[3]: 1
       - op: 1
         valueIndex: 23
         data[0]: -1
         data[1]: -1
         data[2]: -1
-        data[3]: 1
-      - op: 1
-        valueIndex: 24
-        data[0]: -1
-        data[1]: -1
-        data[2]: -1
         data[3]: 13
       - op: 51
+        valueIndex: 24
+        data[0]: 14
+        data[1]: -1
+        data[2]: -1
+        data[3]: 1
+      - op: 1
         valueIndex: 25
-        data[0]: 15
+        data[0]: -1
         data[1]: -1
         data[2]: -1
         data[3]: 1
@@ -775,7 +774,7 @@ VisualEffectResource:
         data[3]: 2
       - op: 50
         valueIndex: 39
-        data[0]: 17
+        data[0]: 16
         data[1]: -1
         data[2]: -1
         data[3]: 1
@@ -795,20 +794,20 @@ VisualEffectResource:
           m_Value: 0.5
         - m_ExpressionIndex: 5
           m_Value: 255
-        - m_ExpressionIndex: 7
-          m_Value: 0
-        - m_ExpressionIndex: 9
+        - m_ExpressionIndex: 8
           m_Value: 2
-        - m_ExpressionIndex: 10
+        - m_ExpressionIndex: 9
           m_Value: 1
-        - m_ExpressionIndex: 11
+        - m_ExpressionIndex: 10
           m_Value: 256
-        - m_ExpressionIndex: 13
+        - m_ExpressionIndex: 12
           m_Value: 64
-        - m_ExpressionIndex: 16
+        - m_ExpressionIndex: 15
           m_Value: 0.3
-        - m_ExpressionIndex: 19
+        - m_ExpressionIndex: 18
           m_Value: 0.5586888
+        - m_ExpressionIndex: 19
+          m_Value: 0
       m_Vector2f:
         m_Array:
         - m_ExpressionIndex: 24
@@ -866,7 +865,7 @@ VisualEffectResource:
             m_PreInfinity: 2
             m_PostInfinity: 2
             m_RotationOrder: 4
-        - m_ExpressionIndex: 17
+        - m_ExpressionIndex: 16
           m_Value:
             serializedVersion: 2
             m_Curve:
@@ -902,7 +901,7 @@ VisualEffectResource:
             m_RotationOrder: 4
       m_Gradient:
         m_Array:
-        - m_ExpressionIndex: 12
+        - m_ExpressionIndex: 11
           m_Value:
             serializedVersion: 2
             key0: {r: 0.007843138, g: 0.007843138, b: 0.007843138, a: 1}
@@ -932,7 +931,7 @@ VisualEffectResource:
             m_Mode: 0
             m_NumColorKeys: 3
             m_NumAlphaKeys: 2
-        - m_ExpressionIndex: 15
+        - m_ExpressionIndex: 14
           m_Value:
             serializedVersion: 2
             key0: {r: 1.3507853, g: 1.9999998, b: 1.8219893, a: 0}
@@ -1238,13 +1237,13 @@ VisualEffectResource:
         index: 4
       values:
       - nameId: uniform_b
-        index: 8
+        index: 7
       - nameId: Size_d
         index: 25
       - nameId: gradient_e
-        index: 18
+        index: 17
       - nameId: uniform_e
-        index: 14
+        index: 13
       params:
       - nameId: sortPriority
         index: 0
@@ -1655,6 +1654,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 8926484042661614941}
   - {fileID: 8926484042661614964}
@@ -1866,6 +1866,7 @@ MonoBehaviour:
   index: 0
   writePosition: 1
   writeTargetPosition: 0
+  mode: 0
 --- !u!114 &8926484042661615020
 MonoBehaviour:
   m_ObjectHideFlags: 0

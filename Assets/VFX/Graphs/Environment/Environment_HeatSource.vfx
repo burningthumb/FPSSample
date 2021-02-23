@@ -348,6 +348,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 114946465509916290}
   - {fileID: 114780028408030698}
@@ -1032,29 +1033,29 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        float3 velocity = float3(0,0,0);\n        uint seed
-      = (uint)0;\n        float lifetime = (float)0;\n        float angleZ = (float)0;\n
+      = (uint)0;\n        float lifetime = (float)1;\n        float angleZ = (float)0;\n
       \       uint particleId = (uint)0;\n        float texIndex = (float)0;\n        bool
       alive = (bool)true;\n        float age = (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n
       \        particleId = particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed
-      = WangHash(particleIndex ^ systemSeed);\n#endif\n        \n        {\n            float
-      tmp_x = FixedRand(particleId ^ asuint(uniform_b));\n            float tmp_z
-      = tmp_x * (float)2;\n            bool tmp_ba = (float)1 >= tmp_z;\n            float3
-      tmp_bd = tmp_ba ? float3(-1.093496,-4.209389E-07,-5.842812E-07) : float3(0.9512554,-4.428965E-07,-6.875993E-07);\n
-      \           SetAttribute_CAC29747( /*inout */position, tmp_bd);\n        }\n
-      \       {\n            SetAttribute_E6295C0( /*inout */velocity,  /*inout */seed,
-      float3(-0.333,-0.333,2), float3(0.333,0.333,3));\n        }\n        {\n            SetAttribute_F01429A3(
-      /*inout */lifetime,  /*inout */seed, (float)1, (float)3);\n        }\n        {\n
-      \           SetAttribute_48A7C211( /*inout */angleZ,  /*inout */seed, (float)0,
-      (float)360);\n        }\n        \n\n\n#if VFX_USE_ALIVE_CURRENT\n        if
-      (alive)\n        {\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\n
-      \           uint index = deadListIn[deadIndex];\n            attributeBuffer.Store3((index
-      * 0x8 + 0x0) << 2,asuint(position));\n            attributeBuffer.Store3((index
-      * 0x4 + 0x100) << 2,asuint(velocity));\n            attributeBuffer.Store((index
-      * 0x1 + 0x180) << 2,asuint(lifetime));\n            attributeBuffer.Store((index
-      * 0x1 + 0x1A0) << 2,asuint(angleZ));\n            attributeBuffer.Store((index
-      * 0x8 + 0x3) << 2,asuint(texIndex));\n            attributeBuffer.Store((index
-      * 0x8 + 0x4) << 2,uint(alive));\n            attributeBuffer.Store((index *
-      0x8 + 0x5) << 2,asuint(age));\n            \n\n        }\n#else\n        uint
+      = WangHash(particleIndex ^ systemSeed);\n#endif\n        \n        {\n            uint
+      tmp_x = particleId ^ asuint(uniform_b);\n            float tmp_y = FixedRand(tmp_x);\n
+      \           float tmp_ba = tmp_y * (float)2;\n            bool tmp_bb = (float)1
+      >= tmp_ba;\n            float3 tmp_be = tmp_bb ? float3(-1.093496,-4.209389E-07,-5.842812E-07)
+      : float3(0.9512554,-4.428965E-07,-6.875993E-07);\n            SetAttribute_CAC29747(
+      /*inout */position, tmp_be);\n        }\n        {\n            SetAttribute_E6295C0(
+      /*inout */velocity,  /*inout */seed, float3(-0.333,-0.333,2), float3(0.333,0.333,3));\n
+      \       }\n        {\n            SetAttribute_F01429A3( /*inout */lifetime,
+      \ /*inout */seed, (float)1, (float)3);\n        }\n        {\n            SetAttribute_48A7C211(
+      /*inout */angleZ,  /*inout */seed, (float)0, (float)360);\n        }\n        \n\n\n#if
+      VFX_USE_ALIVE_CURRENT\n        if (alive)\n        {\n\t\t\tuint deadIndex =
+      deadListIn.DecrementCounter();\n            uint index = deadListIn[deadIndex];\n
+      \           attributeBuffer.Store3((index * 0x8 + 0x0) << 2,asuint(position));\n
+      \           attributeBuffer.Store3((index * 0x4 + 0x100) << 2,asuint(velocity));\n
+      \           attributeBuffer.Store((index * 0x1 + 0x180) << 2,asuint(lifetime));\n
+      \           attributeBuffer.Store((index * 0x1 + 0x1A0) << 2,asuint(angleZ));\n
+      \           attributeBuffer.Store((index * 0x8 + 0x3) << 2,asuint(texIndex));\n
+      \           attributeBuffer.Store((index * 0x8 + 0x4) << 2,uint(alive));\n            attributeBuffer.Store((index
+      * 0x8 + 0x5) << 2,asuint(age));\n            \n\n        }\n#else\n        uint
       index = particleIndex;\n        attributeBuffer.Store3((index * 0x8 + 0x0) <<
       2,asuint(position));\n        attributeBuffer.Store3((index * 0x4 + 0x100) <<
       2,asuint(velocity));\n        attributeBuffer.Store((index * 0x1 + 0x180) <<
@@ -1240,11 +1241,11 @@ VisualEffectResource:
       *= scaleY;\n\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t#if VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\t\tsize3.z
       *= scaleZ;\n\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tconst
       float2 vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\t\n\t\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t\t#endif\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\t#if

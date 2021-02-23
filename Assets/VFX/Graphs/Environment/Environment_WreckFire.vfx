@@ -533,6 +533,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 114946465509916290}
   - {fileID: 114780028408030698}
@@ -1305,7 +1306,7 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        uint seed = (uint)0;\n        float3 velocity = float3(0,0,0);\n
-      \       float lifetime = (float)0;\n        float texIndex = (float)0;\n        bool
+      \       float lifetime = (float)1;\n        float texIndex = (float)0;\n        bool
       alive = (bool)true;\n        float age = (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n
       \        particleId = particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed
       = WangHash(particleIndex ^ systemSeed);\n#endif\n        \n        PositionAABox_0(
@@ -1406,7 +1407,7 @@ VisualEffectResource:
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
       nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t\n\t\t//
       Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"ForwardOnly\"
-      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\t\n\t\t\tstruct
+      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\n\t\t\n\t\t\tstruct
       ps_input\n\t\t\t{\n\t\t\t\tfloat4 pos : SV_POSITION;\n\t\t\t\t#if USE_FLIPBOOK_INTERPOLATION\n\t\t\t\tfloat4
       uv : TEXCOORD0;\n\t\t\t\t#else\n\t\t\t\tfloat2 uv : TEXCOORD0;\t\n\t\t\t\t#endif\n\t\t\t\t#if
       VFX_NEEDS_COLOR_INTERPOLATOR\n\t\t\t\tnointerpolation float4 color : COLOR0;\n\t\t\t\t#endif\n\t\t\t\t#if
@@ -1496,11 +1497,11 @@ VisualEffectResource:
       *= scaleY;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\tsize3.z
       *= scaleZ;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tconst float2
       vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\n\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if VFX_USE_COLOR_CURRENT
@@ -1581,7 +1582,7 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        uint seed = (uint)0;\n        float3 velocity = float3(0,0,0);\n
-      \       float lifetime = (float)0;\n        float texIndex = (float)0;\n        uint
+      \       float lifetime = (float)1;\n        float texIndex = (float)0;\n        uint
       particleId = (uint)0;\n        bool alive = (bool)true;\n        float age =
       (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n         particleId =
       particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed = WangHash(particleIndex
@@ -1635,10 +1636,11 @@ VisualEffectResource:
       particleId = (attributeBuffer.Load((index * 0x4 + 0x203) << 2));\n\t\t\tfloat
       age = asfloat(attributeBuffer.Load((index * 0x8 + 0x5) << 2));\n\t\t\t\n\n\t\t\t\n#if
       VFX_USE_OLDPOSITION_CURRENT\n\t\t\toldPosition = position;\n#endif\n\t\t\t\n\t\t\t{\n\t\t\t
-      \   float tmp_ba = FixedRand(particleId ^ asuint(uniform_b));\n\t\t\t    float
-      tmp_bc = tmp_ba * (float)8;\n\t\t\t    float tmp_bd = (float)32 + tmp_bc;\n\t\t\t
-      \   FlipbookPlay_0( /*inout */texIndex, tmp_bd, deltaTime_a);\n\t\t\t}\n\t\t\tEulerIntegration(
-      /*inout */position, velocity, deltaTime_a);\n\t\t\tAge( /*inout */age, deltaTime_a);\n\t\t\tReap(age,
+      \   uint tmp_ba = particleId ^ asuint(uniform_b);\n\t\t\t    float tmp_bb =
+      FixedRand(tmp_ba);\n\t\t\t    float tmp_bd = tmp_bb * (float)8;\n\t\t\t    float
+      tmp_be = (float)32 + tmp_bd;\n\t\t\t    FlipbookPlay_0( /*inout */texIndex,
+      tmp_be, deltaTime_a);\n\t\t\t}\n\t\t\tEulerIntegration( /*inout */position,
+      velocity, deltaTime_a);\n\t\t\tAge( /*inout */age, deltaTime_a);\n\t\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\t\n\n\t\t\tif (alive)\n\t\t\t{\n\t\t\t\tattributeBuffer.Store3((index
       * 0x8 + 0x0) << 2,asuint(position));\n\t\t\t\tattributeBuffer.Store((index *
       0x8 + 0x3) << 2,asuint(texIndex));\n\t\t\t\tattributeBuffer.Store((index * 0x8
@@ -1654,9 +1656,9 @@ VisualEffectResource:
       + 0x203) << 2));\n\t\tbool alive = (attributeBuffer.Load((index * 0x8 + 0x4)
       << 2));\n\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8 + 0x5) <<
       2));\n\t\t\n\n\t\t\n#if VFX_USE_OLDPOSITION_CURRENT\n\t\toldPosition = position;\n#endif\n\t\t\n\t\t{\n\t\t
-      \   float tmp_ba = FixedRand(particleId ^ asuint(uniform_b));\n\t\t    float
-      tmp_bc = tmp_ba * (float)8;\n\t\t    float tmp_bd = (float)32 + tmp_bc;\n\t\t
-      \   FlipbookPlay_0( /*inout */texIndex, tmp_bd, deltaTime_a);\n\t\t}\n\t\tEulerIntegration(
+      \   uint tmp_ba = particleId ^ asuint(uniform_b);\n\t\t    float tmp_bb = FixedRand(tmp_ba);\n\t\t
+      \   float tmp_bd = tmp_bb * (float)8;\n\t\t    float tmp_be = (float)32 + tmp_bd;\n\t\t
+      \   FlipbookPlay_0( /*inout */texIndex, tmp_be, deltaTime_a);\n\t\t}\n\t\tEulerIntegration(
       /*inout */position, velocity, deltaTime_a);\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\n\n\t\tattributeBuffer.Store3((index * 0x8
       + 0x0) << 2,asuint(position));\n\t\tattributeBuffer.Store((index * 0x8 + 0x3)
@@ -1693,7 +1695,7 @@ VisualEffectResource:
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
       nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t\n\t\t//
       Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"ForwardOnly\"
-      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\t\n\t\t\tstruct
+      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\n\t\t\n\t\t\tstruct
       ps_input\n\t\t\t{\n\t\t\t\tfloat4 pos : SV_POSITION;\n\t\t\t\t#if USE_FLIPBOOK_INTERPOLATION\n\t\t\t\tfloat4
       uv : TEXCOORD0;\n\t\t\t\t#else\n\t\t\t\tfloat2 uv : TEXCOORD0;\t\n\t\t\t\t#endif\n\t\t\t\t#if
       VFX_NEEDS_COLOR_INTERPOLATOR\n\t\t\t\tnointerpolation float4 color : COLOR0;\n\t\t\t\t#endif\n\t\t\t\t#if
@@ -1779,11 +1781,11 @@ VisualEffectResource:
       *= scaleY;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\tsize3.z
       *= scaleZ;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tconst float2
       vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\n\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if VFX_USE_COLOR_CURRENT
@@ -1864,7 +1866,7 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        uint seed = (uint)0;\n        float3 velocity = float3(0,0,0);\n
-      \       float lifetime = (float)0;\n        float texIndex = (float)0;\n        uint
+      \       float lifetime = (float)1;\n        float texIndex = (float)0;\n        uint
       particleId = (uint)0;\n        bool alive = (bool)true;\n        float age =
       (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n         particleId =
       particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed = WangHash(particleIndex
@@ -1930,10 +1932,10 @@ VisualEffectResource:
       mass = (float)1;\n\t\t\tuint particleId = (attributeBuffer.Load((index * 0x1
       + 0x1A00) << 2));\n\t\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8
       + 0x5) << 2));\n\t\t\t\n\n\t\t\t\n#if VFX_USE_OLDPOSITION_CURRENT\n\t\t\toldPosition
-      = position;\n#endif\n\t\t\t\n\t\t\t{\n\t\t\t    float tmp_be = FixedRand(particleId
-      ^ asuint(uniform_b));\n\t\t\t    float tmp_bg = tmp_be * (float)8;\n\t\t\t    float
-      tmp_bh = (float)32 + tmp_bg;\n\t\t\t    FlipbookPlay_0( /*inout */texIndex,
-      tmp_bh, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t    Turbulence_1(position,  /*inout
+      = position;\n#endif\n\t\t\t\n\t\t\t{\n\t\t\t    uint tmp_be = particleId ^ asuint(uniform_b);\n\t\t\t
+      \   float tmp_bf = FixedRand(tmp_be);\n\t\t\t    float tmp_bh = tmp_bf * (float)8;\n\t\t\t
+      \   float tmp_bi = (float)32 + tmp_bh;\n\t\t\t    FlipbookPlay_0( /*inout */texIndex,
+      tmp_bi, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t    Turbulence_1(position,  /*inout
       */velocity, mass, InvFieldTransform_b, FieldTransform_b, (float)0.1898645, (float)5,
       (float)1, (uint)3, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t    Force_1( /*inout
       */velocity, mass, Velocity_c, (float)1, deltaTime_a);\n\t\t\t}\n\t\t\tEulerIntegration(
@@ -1954,14 +1956,14 @@ VisualEffectResource:
       * 0x1 + 0x1A00) << 2));\n\t\tbool alive = (attributeBuffer.Load((index * 0x8
       + 0x4) << 2));\n\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8 +
       0x5) << 2));\n\t\t\n\n\t\t\n#if VFX_USE_OLDPOSITION_CURRENT\n\t\toldPosition
-      = position;\n#endif\n\t\t\n\t\t{\n\t\t    float tmp_be = FixedRand(particleId
-      ^ asuint(uniform_b));\n\t\t    float tmp_bg = tmp_be * (float)8;\n\t\t    float
-      tmp_bh = (float)32 + tmp_bg;\n\t\t    FlipbookPlay_0( /*inout */texIndex, tmp_bh,
-      deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Turbulence_1(position,  /*inout */velocity,
-      mass, InvFieldTransform_b, FieldTransform_b, (float)0.1898645, (float)5, (float)1,
-      (uint)3, deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Force_1( /*inout */velocity, mass,
-      Velocity_c, (float)1, deltaTime_a);\n\t\t}\n\t\tEulerIntegration( /*inout */position,
-      velocity, deltaTime_a);\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
+      = position;\n#endif\n\t\t\n\t\t{\n\t\t    uint tmp_be = particleId ^ asuint(uniform_b);\n\t\t
+      \   float tmp_bf = FixedRand(tmp_be);\n\t\t    float tmp_bh = tmp_bf * (float)8;\n\t\t
+      \   float tmp_bi = (float)32 + tmp_bh;\n\t\t    FlipbookPlay_0( /*inout */texIndex,
+      tmp_bi, deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Turbulence_1(position,  /*inout
+      */velocity, mass, InvFieldTransform_b, FieldTransform_b, (float)0.1898645, (float)5,
+      (float)1, (uint)3, deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Force_1( /*inout */velocity,
+      mass, Velocity_c, (float)1, deltaTime_a);\n\t\t}\n\t\tEulerIntegration( /*inout
+      */position, velocity, deltaTime_a);\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\n\n\t\tattributeBuffer.Store3((index * 0x8
       + 0x0) << 2,asuint(position));\n\t\tattributeBuffer.Store3((index * 0x4 + 0x1000)
       << 2,asuint(velocity));\n\t\tattributeBuffer.Store((index * 0x8 + 0x3) << 2,asuint(texIndex));\n\t\tattributeBuffer.Store((index
@@ -1996,7 +1998,7 @@ VisualEffectResource:
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
       nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t\n\t\t//
       Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"ForwardOnly\"
-      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\t\n\t\t\tstruct
+      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\n\t\t\n\t\t\tstruct
       ps_input\n\t\t\t{\n\t\t\t\tfloat4 pos : SV_POSITION;\n\t\t\t\t#if USE_FLIPBOOK_INTERPOLATION\n\t\t\t\tfloat4
       uv : TEXCOORD0;\n\t\t\t\t#else\n\t\t\t\tfloat2 uv : TEXCOORD0;\t\n\t\t\t\t#endif\n\t\t\t\t#if
       VFX_NEEDS_COLOR_INTERPOLATOR\n\t\t\t\tnointerpolation float4 color : COLOR0;\n\t\t\t\t#endif\n\t\t\t\t#if
@@ -2076,11 +2078,11 @@ VisualEffectResource:
       VFX_USE_SCALEY_CURRENT\n\t\t\t\t\t\tsize3.y *= scaleY;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if
       VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\tsize3.z *= scaleZ;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tconst
       float2 vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\n\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if VFX_USE_COLOR_CURRENT
@@ -2160,7 +2162,7 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        uint seed = (uint)0;\n        float3 velocity = float3(0,0,0);\n
-      \       float lifetime = (float)0;\n        float texIndex = (float)0;\n        bool
+      \       float lifetime = (float)1;\n        float texIndex = (float)0;\n        bool
       alive = (bool)true;\n        float age = (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n
       \        particleId = particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed
       = WangHash(particleIndex ^ systemSeed);\n#endif\n        \n        PositionAABox_0(
@@ -2345,11 +2347,11 @@ VisualEffectResource:
       *= scaleY;\n\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t#if VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\t\tsize3.z
       *= scaleZ;\n\t\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tconst
       float2 vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\t\n\t\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t\t#endif\n\t\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\t\n\t\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t\t#endif\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\t#if
@@ -2433,7 +2435,7 @@ VisualEffectResource:
       \           if (id < currentSumSpawnCount)\n            {\n                break;\n
       \           }\n        }\n        */\n        \n\n#endif\n        float3 position
       = float3(0,0,0);\n        uint seed = (uint)0;\n        float3 velocity = float3(0,0,0);\n
-      \       float lifetime = (float)0;\n        float texIndex = (float)0;\n        bool
+      \       float lifetime = (float)1;\n        float texIndex = (float)0;\n        bool
       alive = (bool)true;\n        float age = (float)0;\n        \n\n#if VFX_USE_PARTICLEID_CURRENT\n
       \        particleId = particleIndex;\n#endif\n#if VFX_USE_SEED_CURRENT\n        seed
       = WangHash(particleIndex ^ systemSeed);\n#endif\n        \n        {\n            PositionAABox_0(
@@ -2547,7 +2549,7 @@ VisualEffectResource:
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
       nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t\n\t\t//
       Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"ForwardOnly\"
-      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\t\n\t\t\tstruct
+      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\n\t\t\n\t\t\tstruct
       ps_input\n\t\t\t{\n\t\t\t\tfloat4 pos : SV_POSITION;\n\t\t\t\t#if USE_FLIPBOOK_INTERPOLATION\n\t\t\t\tfloat4
       uv : TEXCOORD0;\n\t\t\t\t#else\n\t\t\t\tfloat2 uv : TEXCOORD0;\t\n\t\t\t\t#endif\n\t\t\t\t#if
       VFX_NEEDS_COLOR_INTERPOLATOR\n\t\t\t\tnointerpolation float4 color : COLOR0;\n\t\t\t\t#endif\n\t\t\t\t#if
@@ -2629,11 +2631,11 @@ VisualEffectResource:
       *= scaleY;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if VFX_USE_SCALEZ_CURRENT\n\t\t\t\t\t\tsize3.z
       *= scaleZ;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tconst float2
       vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\tconst float4x4 elementToVFX
-      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\tconst
-      float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
-      = TransformPositionVFXToClip(vPos);\n\t\t\t\t\n\t\t\t\t#ifdef VFX_VARYING_NORMAL\n\t\t\t\tfloat
-      normalFlip = (size3.x * size3.y * size3.z) < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL
-      = normalFlip * normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
+      = GetElementToVFXMatrix(axisX,axisY,axisZ,float3(angleX,angleY,angleZ),float3(pivotX,pivotY,pivotZ),size3,position);\n\t\t\t\t\t
+      \ float3 vPos = mul(elementToVFX,float4(vOffsets,0.0f,1.0f)).xyz;\n\t\t\t\n\t\t\t\to.VFX_VARYING_POSCS
+      = TransformPositionVFXToClip(vPos);\n\t\t\t\n\t\t\t\tfloat3 normalWS = normalize(TransformDirectionVFXToWorld(normalize(-transpose(elementToVFX)[2].xyz)));\n\t\t\t\t#ifdef
+      VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
+      < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\to.VFX_VARYING_BENTFACTORS = vOffsets
       * bentNormalFactor;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if VFX_USE_COLOR_CURRENT
@@ -2697,42 +2699,42 @@ VisualEffectResource:
         data[1]: -1
         data[2]: -1
         data[3]: 1
-      - op: 1
+      - op: 8
         valueIndex: 2
+        data[0]: -1
+        data[1]: -1
+        data[2]: -1
+        data[3]: -1
+      - op: 1
+        valueIndex: 3
         data[0]: -1
         data[1]: -1
         data[2]: -1
         data[3]: 1
       - op: 7
-        valueIndex: 3
+        valueIndex: 4
         data[0]: -1
         data[1]: -1
         data[2]: -1
         data[3]: -1
-      - op: 30
-        valueIndex: 4
-        data[0]: 0
-        data[1]: 1
-        data[2]: -1
-        data[3]: 1
-      - op: 8
+      - op: 1
         valueIndex: 5
         data[0]: -1
         data[1]: -1
         data[2]: -1
-        data[3]: -1
-      - op: 25
+        data[3]: 6
+      - op: 30
         valueIndex: 6
-        data[0]: 3
-        data[1]: 2
+        data[0]: 0
+        data[1]: 1
         data[2]: -1
         data[3]: 1
-      - op: 1
+      - op: 25
         valueIndex: 7
-        data[0]: -1
-        data[1]: -1
+        data[0]: 4
+        data[1]: 3
         data[2]: -1
-        data[3]: 6
+        data[3]: 1
       - op: 1
         valueIndex: 8
         data[0]: -1
@@ -2741,8 +2743,8 @@ VisualEffectResource:
         data[3]: 1
       - op: 56
         valueIndex: 9
-        data[0]: 7
-        data[1]: 5
+        data[0]: 5
+        data[1]: 2
         data[2]: -1
         data[3]: 6
       - op: 1
@@ -2754,7 +2756,7 @@ VisualEffectResource:
       - op: 3
         valueIndex: 13
         data[0]: 1
-        data[1]: 6
+        data[1]: 7
         data[2]: 1
         data[3]: -1
       - op: 1
@@ -2771,7 +2773,7 @@ VisualEffectResource:
         data[3]: 14
       - op: 29
         valueIndex: 20
-        data[0]: 4
+        data[0]: 6
         data[1]: 8
         data[2]: -1
         data[3]: 1
@@ -3229,7 +3231,7 @@ VisualEffectResource:
           m_Value: 1
         - m_ExpressionIndex: 1
           m_Value: 0
-        - m_ExpressionIndex: 2
+        - m_ExpressionIndex: 3
           m_Value: -0.2
         - m_ExpressionIndex: 8
           m_Value: 1
@@ -3309,7 +3311,7 @@ VisualEffectResource:
         m_Array: []
       m_Uint:
         m_Array:
-        - m_ExpressionIndex: 7
+        - m_ExpressionIndex: 5
           m_Value: 0
         - m_ExpressionIndex: 58
           m_Value: 3
@@ -6015,6 +6017,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 8926484042661614573}
   - {fileID: 8926484042661614606}
@@ -8700,6 +8703,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 8926484042661614662}
   - {fileID: 8926484042661614695}
@@ -12644,6 +12648,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 8926484042661614811}
   - {fileID: 8926484042661614844}
@@ -14621,6 +14626,7 @@ MonoBehaviour:
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
   m_UISuperCollapsed: 0
+  title: 
   m_Owners:
   - {fileID: 8926484042661614923}
   - {fileID: 8926484042661614956}
