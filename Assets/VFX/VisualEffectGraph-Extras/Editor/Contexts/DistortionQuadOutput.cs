@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.VFX;
 using UnityEngine.Experimental.VFX;
 using UnityEditor.VFX.Block;
+using VFXTaskType = UnityEditor.VFX.VFXTaskType;
 
 [VFXInfo]
 class DistortionQuadOutput : VFXAbstractParticleOutput

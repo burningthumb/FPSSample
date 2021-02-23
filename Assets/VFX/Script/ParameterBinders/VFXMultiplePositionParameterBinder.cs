@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.VFX;
+using UnityEngine.Experimental.VFX.Utility;
 using UnityEngine.VFX.Utils;
 
 [VFXBinder("Utility/Multiple Position Binder")]

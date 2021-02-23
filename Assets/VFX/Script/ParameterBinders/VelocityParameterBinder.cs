@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.VFX;
+using UnityEngine.Experimental.VFX.Utility;
 
 namespace UnityEngine.VFX.Utils
 {

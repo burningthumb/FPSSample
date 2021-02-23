@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Experimental.VFX;
+using UnityEngine.Experimental.VFX.Utility;
 using UnityEngine.VFX.Utils;
 
 [VFXBinder("VFX Volume Mixer/Vector Property Binder")]
