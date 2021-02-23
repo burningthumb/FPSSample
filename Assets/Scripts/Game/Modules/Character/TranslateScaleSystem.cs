@@ -19,7 +19,7 @@ public class HandleTranslateScaleSpawns : InitializeComponentGroupSystem<Transla
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(TranslateScale), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(TranslateScale), ComponentType.Exclude<DespawningEntity>());
     }
     
     protected override void Initialize(ref ComponentGroup group)
@@ -40,7 +40,7 @@ public class HandleTranslateScaleDespawns : DeinitializeComponentGroupSystem<Tra
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(TranslateScale), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(TranslateScale), ComponentType.Exclude<DespawningEntity>());
     }
     
     

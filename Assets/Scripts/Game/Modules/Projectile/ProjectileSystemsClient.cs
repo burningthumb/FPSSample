@@ -204,7 +204,7 @@ public class UpdateClientProjectilesNonPredicted : BaseComponentSystem<ClientPro
 {
     public UpdateClientProjectilesNonPredicted(GameWorld world) : base(world)
     {
-        ExtraComponentRequirements = new [] { ComponentType.Subtractive<UpdateProjectileFlag>() };
+        ExtraComponentRequirements = new [] { ComponentType.Exclude<UpdateProjectileFlag>() };
     }
 
     protected override void Update(Entity entity, ClientProjectile clientProjectile)
@@ -239,8 +239,8 @@ public class HandleProjectileSpawn : BaseComponentSystem
         base.OnCreateManager();
 
         
-        PredictedProjectileGroup = GetComponentGroup(typeof(ProjectileData), typeof(PredictedProjectile), ComponentType.Subtractive<DespawningEntity>());
-        IncommingProjectileGroup = GetComponentGroup(typeof(ProjectileData), ComponentType.Subtractive<ClientProjectileOwner>());
+        PredictedProjectileGroup = GetComponentGroup(typeof(ProjectileData), typeof(PredictedProjectile), ComponentType.Exclude<DespawningEntity>());
+        IncommingProjectileGroup = GetComponentGroup(typeof(ProjectileData), ComponentType.Exclude<ClientProjectileOwner>());
     }
     
     
@@ -365,7 +365,7 @@ public class RemoveMispredictedProjectiles : BaseComponentSystem
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        PredictedProjectileGroup = GetComponentGroup(typeof(PredictedProjectile), ComponentType.Subtractive<DespawningEntity>());
+        PredictedProjectileGroup = GetComponentGroup(typeof(PredictedProjectile), ComponentType.Exclude<DespawningEntity>());
     }
 
     protected override void OnUpdate()

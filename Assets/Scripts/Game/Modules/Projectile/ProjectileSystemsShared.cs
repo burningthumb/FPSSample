@@ -15,7 +15,7 @@ public class CreateProjectileMovementCollisionQueries : BaseComponentSystem
     {
         base.OnCreateManager();
         ProjectileGroup = GetComponentGroup(typeof(UpdateProjectileFlag), typeof(ProjectileData), 
-            ComponentType.Subtractive<DespawningEntity>());
+            ComponentType.Exclude<DespawningEntity>());
     }
 
     protected override void OnUpdate()
@@ -69,7 +69,7 @@ public class HandleProjectileMovementCollisionQuery : BaseComponentSystem
     {
         base.OnCreateManager();
         ProjectileGroup = GetComponentGroup(typeof(UpdateProjectileFlag), typeof(ProjectileData), 
-            ComponentType.Subtractive<DespawningEntity>());
+            ComponentType.Exclude<DespawningEntity>());
     }
     
     protected override void OnUpdate()

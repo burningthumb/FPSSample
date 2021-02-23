@@ -344,7 +344,7 @@ public class ApplyPresentationState : BaseComponentSystem
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        CharGroup = GetComponentGroup(typeof(AnimStateController), typeof(CharacterPresentationSetup), ComponentType.Subtractive<DespawningEntity>() );   
+        CharGroup = GetComponentGroup(typeof(AnimStateController), typeof(CharacterPresentationSetup), ComponentType.Exclude<DespawningEntity>() );   
     }
 
     protected override void OnUpdate()

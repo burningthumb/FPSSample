@@ -55,7 +55,7 @@ public class UpdateTerraformerWeaponA : BaseComponentSystem<CharacterPresentatio
 {
     public UpdateTerraformerWeaponA(GameWorld world) : base(world)
     {
-        ExtraComponentRequirements = new[] {ComponentType.Subtractive<DespawningEntity>(),};
+        ExtraComponentRequirements = new[] {ComponentType.Exclude<DespawningEntity>(),};
     }
     
     protected override void Update(Entity entity, CharacterPresentationSetup charPresentation, TerraformerWeaponA weapon)

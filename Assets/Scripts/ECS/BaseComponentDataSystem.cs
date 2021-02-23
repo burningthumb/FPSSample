@@ -33,7 +33,7 @@ public abstract class BaseComponentSystem : ComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
  		list.AddRange(new ComponentType[] { typeof(T1) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
  		Group = GetComponentGroup(list.ToArray());
  	}
  
@@ -75,7 +75,7 @@ public abstract class BaseComponentSystem<T1,T2> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] {typeof(T1), typeof(T2)});
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -119,7 +119,7 @@ public abstract class BaseComponentSystem<T1,T2,T3> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1), typeof(T2), typeof(T3) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -161,7 +161,7 @@ public abstract class BaseComponentDataSystem<T1> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -202,7 +202,7 @@ public abstract class BaseComponentDataSystem<T1,T2> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1), typeof(T2) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -245,7 +245,7 @@ public abstract class BaseComponentDataSystem<T1,T2,T3> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1), typeof(T2), typeof(T3) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -291,7 +291,7 @@ public abstract class BaseComponentDataSystem<T1,T2,T3,T4> : BaseComponentSystem
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -338,7 +338,7 @@ public abstract class BaseComponentDataSystem<T1,T2,T3,T4, T5> : BaseComponentSy
 		if(ExtraComponentRequirements != null)		
 			list.AddRange(ExtraComponentRequirements);
 		list.AddRange(new ComponentType[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) } );
-		list.Add(ComponentType.Subtractive<DespawningEntity>());
+		list.Add(ComponentType.Exclude<DespawningEntity>());
 		Group = GetComponentGroup(list.ToArray());
 	}
 
@@ -379,7 +379,7 @@ public abstract class InitializeComponentSystem<T> : BaseComponentSystem
 	{
 		base.OnCreateManager();
 		name = GetType().Name;
-		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Subtractive<SystemState>());
+		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Exclude<SystemState>());
 	}
     
 	protected override void OnUpdate()
@@ -422,7 +422,7 @@ public abstract class InitializeComponentDataSystem<T,K> : BaseComponentSystem
 	{
 		base.OnCreateManager();
 		name = GetType().Name;
-		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Subtractive<K>());
+		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Exclude<K>());
 	}
     
 	protected override void OnUpdate()
@@ -534,7 +534,7 @@ public abstract class InitializeComponentGroupSystem<T,S> : BaseComponentSystem
 	{
 		base.OnCreateManager();
 		name = GetType().Name;
-		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Subtractive<S>());
+		IncomingGroup = GetComponentGroup(typeof(T),ComponentType.Exclude<S>());
 	}
     
 	protected override void OnUpdate()

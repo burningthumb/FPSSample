@@ -20,7 +20,7 @@ public class HandleTwistSpawns : InitializeComponentGroupSystem<Twist, HandleTwi
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(Twist), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(Twist), ComponentType.Exclude<DespawningEntity>());
     }
 
     protected override void Initialize(ref ComponentGroup group)
@@ -41,7 +41,7 @@ public class HandleTwistDespawns : DeinitializeComponentGroupSystem<Twist>
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(Twist), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(Twist), ComponentType.Exclude<DespawningEntity>());
     }
     
     protected override void Deinitialize(ref ComponentGroup group)

@@ -47,7 +47,7 @@ public class System_RobotWeaponA : BaseComponentSystem<RobotWeaponA,CharacterPre
 {
     public System_RobotWeaponA(GameWorld world) : base(world)
     {
-        ExtraComponentRequirements = new[] {ComponentType.Subtractive<DespawningEntity>()};
+        ExtraComponentRequirements = new[] {ComponentType.Exclude<DespawningEntity>()};
     }
     
     protected override void Update(Entity entity, RobotWeaponA weapon, CharacterPresentationSetup charPresentation)

@@ -13,7 +13,7 @@ public class ApplyGrenadePresentation : BaseComponentSystem
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(GrenadeClient),typeof(PresentationEntity),ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(GrenadeClient),typeof(PresentationEntity),ComponentType.Exclude<DespawningEntity>());
     }
 
     protected override void OnUpdate()

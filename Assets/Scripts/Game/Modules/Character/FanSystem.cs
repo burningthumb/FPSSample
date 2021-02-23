@@ -19,7 +19,7 @@ public class HandleFanSpawns : InitializeComponentGroupSystem<Fan, HandleFanSpaw
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(Fan), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(Fan), ComponentType.Exclude<DespawningEntity>());
     }
     
     protected override void Initialize(ref ComponentGroup group)
@@ -40,7 +40,7 @@ public class HandleFanDespawns : DeinitializeComponentGroupSystem<Fan>
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(Fan), ComponentType.Subtractive<DespawningEntity>());
+        Group = GetComponentGroup(typeof(Fan), ComponentType.Exclude<DespawningEntity>());
     }
     
     protected override void Deinitialize(ref ComponentGroup group)
