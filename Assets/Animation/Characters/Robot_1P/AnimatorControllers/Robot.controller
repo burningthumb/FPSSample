@@ -216,11 +216,6 @@ MonoBehaviour:
   sprintEnterVelocityFloatName: Sprint_Enter_Velocity
   sprintExitVelocityFloatName: Sprint_Exit_Velocity
   sprintWeightName: Sprint_Weight
-  m_SprintWeight: 0
-  sprintBoolParam: 0
-  enterSpeedParam: 0
-  exitSpeedParam: 0
-  sprintWeightParam: 0
 --- !u!206 &206163052069376546
 BlendTree:
   m_ObjectHideFlags: 1
