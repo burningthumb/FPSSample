@@ -77,7 +77,7 @@ public class GameWorld
         GameDebug.Assert(World.Active != null,"There is no active world");
         m_ECSWorld = World.Active; 
         
-        m_EntityManager = m_ECSWorld.GetOrCreateManager<EntityManager>();
+        m_EntityManager = m_ECSWorld.EntityManager;
         
         GameDebug.Assert(m_EntityManager.IsCreated);
 
