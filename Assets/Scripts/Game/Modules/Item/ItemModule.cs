@@ -3,8 +3,8 @@ using Unity.Entities;
 
 public class ItemModule
 {
-    List<ScriptBehaviourManager> m_handleSpawnSystems = new List<ScriptBehaviourManager>();
-    List<ScriptBehaviourManager> m_systems = new List<ScriptBehaviourManager>();
+    List<ComponentSystem> m_handleSpawnSystems = new List<ComponentSystem>();
+    List<ComponentSystem> m_systems = new List<ComponentSystem>();
     GameWorld m_world;
     
     public ItemModule(GameWorld world)

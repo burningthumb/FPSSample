@@ -173,8 +173,8 @@ class CharacterModuleClient : CharacterModuleShared
     }
    
     
-    readonly List<ScriptBehaviourManager> m_InterpolateSystems = new List<ScriptBehaviourManager>();
-    readonly List<ScriptBehaviourManager> m_LateUpdateSystems = new List<ScriptBehaviourManager>();
+    readonly List<ComponentSystem> m_InterpolateSystems = new List<ComponentSystem>();
+    readonly List<ComponentSystem> m_LateUpdateSystems = new List<ComponentSystem>();
     
 
     
