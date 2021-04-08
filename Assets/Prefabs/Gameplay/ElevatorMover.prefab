@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4735251062152106}
   - component: {fileID: 114243827462031808}
-  - component: {fileID: 114518585125435524}
   - component: {fileID: 114568717967739322}
   m_Layer: 0
   m_Name: ElevatorMover
@@ -43,18 +42,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114518585125435524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345634959574666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3958d4905c0d4b94587a89934df8e787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114568717967739322
