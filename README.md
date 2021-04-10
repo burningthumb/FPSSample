@@ -2,39 +2,30 @@
 
 # FPS Sample
 
-**Update about the state of the project:**
-This project is based on Unity 2018.3 and no longer being actively maintained.
-Feel free to continue to use it as a learning resource or simply for
-inspiration. As always, you should upgrade to latest version of Unity
-and packages if you intend to start a project.
+**This project is based on Unity 2019.2.21f and no longer being actively maintained.**
 
-Thanks for checking out this sample!
+Due to is heavy reliance on an obsolete version of Unity DOTS the effort required to move it beyond this verion of Unity is more than I am prepared to commit.  If you are interested in moving it forward beyond this I will glady work with you to incorporate and verify changes.
 
-This is a fully functional, first person multiplayer shooter game made in
-Unity and with full source and assets. It was developed by a small
-team from Unity Technologies. Our goals are to test and showcase new
-features in Unity and to be of use for teams who can bootstrap on top of
-this, extract useful bits and tools or simply learn from and get inspired by
-what is in the project.
+Having said that, since you can open it in Unity 2019 its not so bad as a project from which you can extract some of the many resourced.
 
-Visit our [landing page](https://unity.com/fps-sample) for more high
+At one time, several years ago, this was a fully functional, first person multiplayer shooter game made in
+Unity. This repository includes full source and assets. It was developed by a small
+team from Unity Technologies. 
+Visit the [landing page](https://unity.com/fps-sample) for more high
 level information about the project. Or reach out [in the forum](https://forum.unity.com/forums/fps-sample-game.184).
 
-The project is using a number of new technologies: We use the new [HD Render
-Pipeline](https://github.com/Unity-Technologies/ScriptableRenderPipeline), meaning 
-all content has been authored for HDRP. We are also using the new
-[network transport layer](https://github.com/Unity-Technologies/multiplayer) as well as the [Entity-Component System](https://unity3d.com/unity/features/job-system-ECS). 
-In the case of ECS, we have primarily adopted the "ECS-pattern" and use it in
-hybrid mode with a lot of regular components. As more and more features of
-Unity become available in ECS-aware versions, we will migrate to them.
+I updated it to Unity 2019 and merged the macOS build stuff (but did not test it) you can find online elsewhere. Unfortunately the Burst compiler does not work with this version of Unity on macOS 11 as Unity misidentifies macOS 11 as Linux and tries to run the wrong executables.
+
+The project is using a number of technologies that have been changed so much that you will not find them very useful. The assets are high quality and you may find them very useful.
 
 ## Status and prerequisites
 
 Current status at a glance:
-```
-Unity version: 2018.3.8f1
-Platforms    : Windows (client and server) and Linux (server only)
-```
+
+__Unity version:__   2019.2.21f1
+ 
+__Platforms:__ Windows (client and server), Linux (server only), Mac (client and server - untested)
+
 
 ## Getting the project
 
@@ -66,12 +57,6 @@ few clients to it.
 
 The first time you open the project you need patience! It takes a while
 to import all the assets.
-
-> __NOTE__: Due to a bug in Unity 2018.3, you have to take the following step right after the initial import:
-> 1 Search for `Firstperson_Projection` in the Project search field. Select the 4 shaders, right click and reimport them.
-> 2 If you have script compile errors related to entities, you need to remove and re-install the entities package.
->
-> One day soon we will remove this note and there will be cake.
 
 Once the editor is ready, open the _Project Tools Window_ by
 navigating to ___FPS Sample > Windows > Project tools___.
@@ -128,17 +113,6 @@ a standalone, headless server, the other is a client that will attempt to
 connect to the server.
 
 Congratulations! If you made it this far you should celebrate a bit!
-
-## Development of FPS Sample, Contributions etc.
-
-As of today, internally development of the project happens on Perforce. We
-push versions of the project to github from there. As we do that we will update
-the [CHANGELOG](CHANGELOG.md) with highlights but the full history is not
-carried over.
-
-For practical reasons we are not able to take larger contributions
-just now. But bugfixes are very welcome! Read the guidelines for
-contributing in [CONTRIBUTING](CONTRIBUTING.md).
 
 ## More information
 
